@@ -1,25 +1,25 @@
 'use client';
 
-import { useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { Conversation, Message, User } from "@prisma/client";
-import { format } from "date-fns";
-import { useSession } from "next-auth/react";
+import {useCallback, useMemo} from "react";
+import {useRouter} from "next/navigation";
+import {Conversation, Message, User} from "@prisma/client";
+import {format} from "date-fns";
+import {useSession} from "next-auth/react";
 import clsx from "clsx";
 
 import Avatar from "@/app/components/Avatar";
 import useOtherUser from "@/app/hooks/useOtherUser";
 import AvatarGroup from "@/app/components/AvatarGroup";
-import { FullConversationType } from "@/app/types";
+import {FullConversationType} from "@/app/types";
 
 interface ConversationBoxProps {
   data: FullConversationType,
   selected?: boolean;
 }
 
-const ConversationBox: React.FC<ConversationBoxProps> = ({ 
-  data, 
-  selected 
+const ConversationBox: React.FC<ConversationBoxProps> = ({
+  data,
+  selected
 }) => {
   const otherUser = useOtherUser(data);
   const session = useSession();
@@ -31,13 +31,14 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
 
   const lastMessage = useMemo(() => {
     const messages = data.messages || [];
+    console.log('last message', messages);
 
     return messages[messages.length - 1];
   }, [data.messages]);
 
   const userEmail = useMemo(() => session.data?.user?.email,
-  [session.data?.user?.email]);
-  
+    [session.data?.user?.email]);
+
   const hasSeen = useMemo(() => {
     if (!lastMessage) {
       return false;
@@ -59,13 +60,21 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
     }
 
     if (lastMessage?.body) {
-      return lastMessage?.body
+      return lastMessage?.body;
     }
 
     return 'Started a conversation';
   }, [lastMessage]);
 
-  return ( 
+  const lastSenderText = useMemo(() => {
+    if (lastMessage?.sender?.name) {
+      return lastMessage?.sender?.name;
+    }
+
+    return '';
+  }, [lastMessage]);
+
+  return (
     <div
       onClick={handleClick}
       className={clsx(`
@@ -96,7 +105,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
               {data.name || otherUser.name}
             </p>
             {lastMessage?.createdAt && (
-              <p 
+              <p
                 className="
                   text-xs 
                   text-gray-400 
@@ -107,19 +116,19 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
               </p>
             )}
           </div>
-          <p 
+          <p
             className={clsx(`
               truncate 
               text-sm
               `,
               hasSeen ? 'text-gray-500' : 'text-black font-medium'
             )}>
-              {lastMessageText}
-            </p>
+            {data.isGroup ? lastSenderText + ": " : ''} {lastMessageText}
+          </p>
         </div>
       </div>
     </div>
   );
-}
- 
+};
+
 export default ConversationBox;
