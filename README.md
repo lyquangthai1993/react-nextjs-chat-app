@@ -45,3 +45,18 @@ pnpm dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 
+## Key Features:
+
+- Real-time messaging using Pusher
+- Message notifications and alerts
+- Tailwind design
+- Full responsive
+- Credential authentication with NextAuth, Google, Github
+- File and image upload using Cloudinary CDN
+- Handle form by react-hook-form
+- Error handling with react-toast
+- Online/offline user status
+- Group chats and one-on-one messaging
+- Message attachments and file sharing
+- User profile customization and settings
+- How to write POST, GET, and DELETE routes in route handlers (app/api)
