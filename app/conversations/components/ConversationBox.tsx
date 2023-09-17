@@ -123,7 +123,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
               `,
               hasSeen ? 'text-gray-500' : 'text-black font-medium'
             )}>
-            {data.isGroup ? lastSenderText + ": " : ''} {lastMessageText}
+            {data.isGroup && lastSenderText ? lastSenderText + ": " : ''} {lastMessageText}
           </p>
         </div>
       </div>
